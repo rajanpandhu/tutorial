@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Banner from '../Banner';
 import BannerImage from '../../assets/banner.jpg';
 import Button from '../Button';
+import { BlogList } from '../include/BlogList';
 
 const Home = () => {
      const [welcomeMessage, setWelcomeMessage] = useState('Welcome to Tasty Bites! 🍕');
@@ -109,7 +110,7 @@ const Home = () => {
         <p>{secBtn }</p>
        <Button variant="primary" onClick={handleClick} childern="Secondary Button" disabled={itemCount >= 20 && ('true')}>
       </Button> 
-              
+               <BlogList />
         </div>
         </>
     )
