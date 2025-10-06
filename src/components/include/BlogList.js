@@ -18,7 +18,10 @@ const totalPages = Math.ceil(blogs.length / itemsPerPage);
   // Handle page change
   const handlePageChange = (page) => {
     setCurrentPage(page);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+     const element = document.getElementById('allBlogs');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   };
 
   if (loading) {
@@ -34,7 +37,7 @@ const totalPages = Math.ceil(blogs.length / itemsPerPage);
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-800 mb-2">
+          <h1 className="text-4xl font-bold text-gray-800 mb-2" id="allBlogs">
             📝 All Blog Posts
           </h1>
           <p className="text-gray-600 mb-4">

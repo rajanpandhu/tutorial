@@ -10,6 +10,9 @@ import logo from './assets/logo.png';
 
 import Home from './components/pages/Home';
 import About from './components/pages/About';
+import Contact from './components/pages/Contact';
+
+import Register from './components/loginregister/RegistrationForm';
 
 function App() {
 
@@ -33,7 +36,8 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/menu" element={<About />} />
             <Route path="/about" element={<About />} />
-            <Route path="/contact" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/register" element={<Register />} />
           </Routes>
         </main>
 
