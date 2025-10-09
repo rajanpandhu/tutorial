@@ -11,6 +11,7 @@ import logo from './assets/logo.png';
 import Home from './components/pages/Home';
 import About from './components/pages/About';
 import Contact from './components/pages/Contact';
+import Shop from './components/pages/Shop';
 
 import Register from './components/loginregister/RegistrationForm';
 
@@ -36,6 +37,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/menu" element={<About />} />
             <Route path="/about" element={<About />} />
+            <Route path="/shop" element={<Shop />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/register" element={<Register />} />
           </Routes>
