@@ -1,5 +1,5 @@
 // File: src/App.js
-// Ye main App component hai - sabse important file
+// Main App component with Cart & Favorites in Header
 
 import React from 'react';
 import './App.css';
@@ -12,16 +12,40 @@ import Home from './components/pages/Home';
 import About from './components/pages/About';
 import Contact from './components/pages/Contact';
 import Shop from './components/pages/Shop';
-
 import Register from './components/loginregister/RegistrationForm';
 
-function App() {
+// Import Cart & Favorites Components
+import CartSidebar from './components/cart/CartSidebar';
+import FavoritesSidebar from './components/favorites/FavoritesSidebar';
 
+// Import Contexts
+import { CartProvider, useCart } from './contexts/CartContext';
+import { FavoritesProvider, useFavorites } from './contexts/FavoritesContext';
+
+// ✅ Inner component jo providers ke andar hai
+function AppContent() {
+  // ✅ Ab hooks properly providers ke andar use ho rahe hain
+  const { 
+    cartItems, 
+    updateQuantity, 
+    removeItem, 
+    getTotalItems, 
+    getTotalPrice,
+    isCartOpen,
+    setIsCartOpen
+  } = useCart();
   
+  const { 
+    favoriteItems, 
+    removeFavorite, 
+    getTotalFavorites,
+    isFavoritesOpen,
+    setIsFavoritesOpen
+  } = useFavorites();
+
   return (
-     <BrowserRouter>
     <div className="App">
-      {/* Header Section */}
+      {/* ✅ Header with Cart & Favorites Icons */}
       <Header 
         logo={logo}
         title="FOOD FIND"
@@ -30,18 +54,46 @@ function App() {
         borderColor="#3498db"
        
       />
-    <Navigation />
-       {/* Main Content with Routes */}
-        <main style={{ minHeight: '70vh' }}>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/menu" element={<About />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/shop" element={<Shop />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/register" element={<Register />} />
-          </Routes>
-        </main>
+      
+      {/* Navigation */}
+      <Navigation 
+      
+       totalCartItems={getTotalItems()}
+        totalFavorites={getTotalFavorites()}
+        onCartClick={() => setIsCartOpen(true)}
+        onFavoritesClick={() => setIsFavoritesOpen(true)}
+      />
+
+      {/* ✅ Favorites Sidebar - Sab pages pe available */}
+      <FavoritesSidebar
+        isOpen={isFavoritesOpen}
+        onClose={() => setIsFavoritesOpen(false)}
+        favoriteItems={favoriteItems}
+        onRemoveFavorite={removeFavorite}
+      />
+
+      {/* ✅ Cart Sidebar - Sab pages pe available */}
+      <CartSidebar
+        isOpen={isCartOpen}
+        onClose={() => setIsCartOpen(false)}
+        cartItems={cartItems}
+        onUpdateQuantity={updateQuantity}
+        onRemoveItem={removeItem}
+        totalPrice={getTotalPrice()}
+      />
+
+      {/* Main Content with Routes */}
+      <main style={{ minHeight: '70vh' }}>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/menu" element={<About />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/shop" element={<Shop />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/register" element={<Register />} />
+        </Routes>
+      </main>
+
 
       {/* Footer */}
       <footer style={{
@@ -53,6 +105,18 @@ function App() {
         <p>© 2024 Tasty Bites Restaurant | Made with React ⚛️</p>
       </footer>
     </div>
+  );
+}
+
+// ✅ Main App wrapper with Providers
+function App() {
+  return (
+    <BrowserRouter>
+      <CartProvider>
+        <FavoritesProvider>
+          <AppContent />
+        </FavoritesProvider>
+      </CartProvider>
     </BrowserRouter>
   );
 }

@@ -1,37 +1,20 @@
-import React, { useState, useEffect } from 'react';
+// File: src/components/pages/Shop.js
+// Shop page - Cart & Favorites icons ab Header mein hain
 
-// Import Components
-import CartSidebar from '../cart/CartSidebar';
-import FavoritesSidebar from '../favorites/FavoritesSidebar';
+import React, { useState, useEffect } from 'react';
 import FilterSection from '../FilterSection';
 import ProductCard from '../ProductCard';
-import CartIcon from '../cart/CartIcon';
-import FavoritesIcon from '../favorites/FavoritesIcon';
 
-// Import Hooks
-import useCart from '../hooks/useCart';
-import useFavorites from '../hooks/useFavorites';
+// ✅ Import Global Hooks
+import { useCart } from '../../contexts/CartContext';
+import { useFavorites } from '../../contexts/FavoritesContext';
 
 import '../../assets/css/shop.css';
 
 const ShopPage = () => {
-  // Cart aur Favorites hooks
-  const { 
-    cartItems, 
-    addToCart, 
-    updateQuantity, 
-    removeItem, 
-    getTotalItems, 
-    getTotalPrice 
-  } = useCart();
-  
-  const { 
-    favoriteItems, 
-    toggleFavorite, 
-    removeFavorite, 
-    isFavorite, 
-    getTotalFavorites 
-  } = useFavorites();
+  // ✅ Use Global Cart & Favorites hooks
+  const { addToCart } = useCart();
+  const { toggleFavorite, isFavorite } = useFavorites();
 
   // Products state
   const [products, setProducts] = useState([]);
@@ -43,10 +26,6 @@ const ShopPage = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
   const [itemsToShow, setItemsToShow] = useState(12);
-  
-  // Sidebar state
-  const [isCartOpen, setIsCartOpen] = useState(false);
-  const [isFavoritesOpen, setIsFavoritesOpen] = useState(false);
 
   useEffect(() => {
     fetchProducts();
@@ -108,13 +87,13 @@ const ShopPage = () => {
   };
 
   const handleAddToCart = (product) => {
-    addToCart(product);
+    addToCart(product); // ✅ Sidebar automatically opens
     showNotification('✓ Added to cart!', 'cart-notification');
   };
 
   const handleToggleFavorite = (product) => {
     const wasFavorite = isFavorite(product.id);
-    toggleFavorite(product);
+    toggleFavorite(product); // ✅ Sidebar automatically opens when adding
     
     if (wasFavorite) {
       showNotification('Removed from favorites', 'cart-notification');
@@ -145,47 +124,17 @@ const ShopPage = () => {
 
   return (
     <div className="shop-page">
-      {/* ✅ Header with Cart & Favorites Icons */}
+      {/* ✅ Shop Header - Icons ab main Header mein hain */}
       <header className="shop-header">
         <div className="shop-header-content">
           <div className="shop-header-title">
             <h1>Our Shop</h1>
             <p>Discover amazing products</p>
           </div>
-          
-          <div className="header-actions">
-            {/* Favorites Icon - Reusable Component */}
-            <FavoritesIcon 
-              totalFavorites={getTotalFavorites()} 
-              onClick={() => setIsFavoritesOpen(true)} 
-            />
-
-            {/* Cart Icon - Reusable Component */}
-            <CartIcon 
-              totalItems={getTotalItems()} 
-              onClick={() => setIsCartOpen(true)} 
-            />
-          </div>
         </div>
       </header>
 
-      {/* Favorites Sidebar */}
-      <FavoritesSidebar
-        isOpen={isFavoritesOpen}
-        onClose={() => setIsFavoritesOpen(false)}
-        favoriteItems={favoriteItems}
-        onRemoveFavorite={removeFavorite}
-      />
-
-      {/* Cart Sidebar */}
-      <CartSidebar
-        isOpen={isCartOpen}
-        onClose={() => setIsCartOpen(false)}
-        cartItems={cartItems}
-        onUpdateQuantity={updateQuantity}
-        onRemoveItem={removeItem}
-        totalPrice={getTotalPrice()}
-      />
+      {/* ✅ Sidebars ab App.js level pe hain - sab pages pe available */}
 
       <div className="shop-content">
         <div className="shop-grid">

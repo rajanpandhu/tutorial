@@ -1,50 +1,66 @@
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 
 const FavoritesContext = createContext();
 
 export const FavoritesProvider = ({ children }) => {
   const [favoriteItems, setFavoriteItems] = useState([]);
+  const [isFavoritesOpen, setIsFavoritesOpen] = useState(false);
 
+  // Toggle favorite
   const toggleFavorite = (product) => {
-    setFavoriteItems(prev => {
-      const isFavorite = prev.find(item => item.id === product.id);
-      if (isFavorite) {
-        return prev.filter(item => item.id !== product.id);
+    setFavoriteItems((prevItems) => {
+      const exists = prevItems.find(item => item.id === product.id);
+      
+      if (exists) {
+        // Remove from favorites
+        return prevItems.filter(item => item.id !== product.id);
+      } else {
+        // Add to favorites
+        // ✅ Auto open favorites sidebar when item added
+        setIsFavoritesOpen(true);
+        return [...prevItems, product];
       }
-      return [...prev, product];
     });
   };
 
+  // Remove from favorites
   const removeFavorite = (productId) => {
-    setFavoriteItems(prev => prev.filter(item => item.id !== productId));
+    setFavoriteItems(prevItems => prevItems.filter(item => item.id !== productId));
   };
 
-  const isFavorite = (productId) => {
-    return favoriteItems.some(item => item.id === productId);
-  };
-
-  const getTotalFavorites = () => {
-    return favoriteItems.length;
-  };
-
+  // Clear all favorites
   const clearFavorites = () => {
     setFavoriteItems([]);
   };
 
-  return (
-    <FavoritesContext.Provider 
-      value={{ 
-        favoriteItems, 
-        toggleFavorite, 
-        removeFavorite, 
-        isFavorite, 
-        getTotalFavorites,
-        clearFavorites 
-      }}
-    >
-      {children}
-    </FavoritesContext.Provider>
-  );
+  // Check if item is favorite
+  const isFavorite = (productId) => {
+    return favoriteItems.some(item => item.id === productId);
+  };
+
+  // Get total favorites
+  const getTotalFavorites = () => {
+    return favoriteItems.length;
+  };
+
+  // Toggle favorites sidebar
+  const toggleFavorites = () => {
+    setIsFavoritesOpen(!isFavoritesOpen);
+  };
+
+  const value = {
+    favoriteItems,
+    toggleFavorite,
+    removeFavorite,
+    clearFavorites,
+    isFavorite,
+    getTotalFavorites,
+    isFavoritesOpen,
+    setIsFavoritesOpen,
+    toggleFavorites
+  };
+
+  return <FavoritesContext.Provider value={value}>{children}</FavoritesContext.Provider>;
 };
 
 export const useFavorites = () => {
@@ -54,3 +70,5 @@ export const useFavorites = () => {
   }
   return context;
 };
+
+export default FavoritesContext;

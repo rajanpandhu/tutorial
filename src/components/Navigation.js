@@ -1,7 +1,14 @@
 import React from 'react';
 import {  Link, useLocation } from 'react-router-dom';
+import CartIcon from './cart/CartIcon';
+import FavoritesIcon from './favorites/FavoritesIcon';
 
-const Navigation = () => {
+const Navigation = ({
+     totalCartItems = 0,
+  totalFavorites = 0,
+  onCartClick,
+  onFavoritesClick
+}) => {
 
       const location = useLocation();
 
@@ -56,6 +63,20 @@ const Navigation = () => {
                 </Link>
             ))
             }
+
+             <div style={{display:'flex'}}>
+                {/* Favorites Icon */}
+                <FavoritesIcon 
+                totalFavorites={totalFavorites} 
+                onClick={onFavoritesClick} 
+                />
+
+                {/* Cart Icon */}
+                <CartIcon 
+                totalItems={totalCartItems} 
+                onClick={onCartClick} 
+                />
+            </div>
             </nav>
    
     )

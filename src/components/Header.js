@@ -1,6 +1,7 @@
 import React from 'react';
 
 
+
 const Header = ({ 
   title, 
   subtitle, 
@@ -9,7 +10,7 @@ const Header = ({
   backgroundColor = '#2c3e50',
   textColor = 'white',
   style = {},
-
+ 
 }) => {
   const headerStyle = {
     backgroundColor: backgroundColor,
@@ -41,6 +42,7 @@ const Header = ({
         </p>
       )}
 
+    
     </header>
   );
 };
