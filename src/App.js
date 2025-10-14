@@ -3,7 +3,7 @@
 
 import React from 'react';
 import './App.css';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
 import Header from './components/Header';
 import Navigation from './components/Navigation';
 import logo from './assets/logo.png';
@@ -13,6 +13,8 @@ import About from './components/pages/About';
 import Contact from './components/pages/Contact';
 import Shop from './components/pages/Shop';
 import Register from './components/loginregister/RegistrationForm';
+import CheckoutPage from './components/checkout/checkout'; // ✅ Import Checkout Form
+
 
 // Import Cart & Favorites Components
 import CartSidebar from './components/cart/CartSidebar';
@@ -24,11 +26,13 @@ import { FavoritesProvider, useFavorites } from './contexts/FavoritesContext';
 
 // ✅ Inner component jo providers ke andar hai
 function AppContent() {
+  const navigate = useNavigate();
   // ✅ Ab hooks properly providers ke andar use ho rahe hain
   const { 
     cartItems, 
     updateQuantity, 
-    removeItem, 
+    removeItem,
+    clearCart,
     getTotalItems, 
     getTotalPrice,
     isCartOpen,
@@ -42,6 +46,14 @@ function AppContent() {
     isFavoritesOpen,
     setIsFavoritesOpen
   } = useFavorites();
+
+  const handleCheckout = () => {
+    if (cartItems.length === 0) {
+      alert('Your cart is empty!');
+      return;
+    }
+    navigate('/checkout'); // Navigate to checkout page
+  };
 
   return (
     <div className="App">
@@ -57,8 +69,7 @@ function AppContent() {
       
       {/* Navigation */}
       <Navigation 
-      
-       totalCartItems={getTotalItems()}
+        totalCartItems={getTotalItems()}
         totalFavorites={getTotalFavorites()}
         onCartClick={() => setIsCartOpen(true)}
         onFavoritesClick={() => setIsFavoritesOpen(true)}
@@ -80,7 +91,9 @@ function AppContent() {
         onUpdateQuantity={updateQuantity}
         onRemoveItem={removeItem}
         totalPrice={getTotalPrice()}
+        onCheckout={handleCheckout}  // ✅ Fix: was "nCheckout"
       />
+
 
       {/* Main Content with Routes */}
       <main style={{ minHeight: '70vh' }}>
@@ -91,6 +104,16 @@ function AppContent() {
           <Route path="/shop" element={<Shop />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/register" element={<Register />} />
+          <Route 
+              path="/checkout" 
+              element={
+                <CheckoutPage 
+                  cartItems={cartItems} 
+                  onClearCart={clearCart} 
+                />
+              } 
+            />
+        
         </Routes>
       </main>
 

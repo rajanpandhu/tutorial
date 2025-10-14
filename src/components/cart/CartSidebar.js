@@ -1,7 +1,22 @@
 import React from 'react';
 import { ShoppingCart, X, Trash2, Plus, Minus } from 'lucide-react';
 
-const CartSidebar = ({ isOpen, onClose, cartItems, onUpdateQuantity, onRemoveItem, totalPrice }) => {
+const CartSidebar = ({ isOpen, onClose, cartItems, onUpdateQuantity, onRemoveItem, totalPrice, onCheckout }) => {
+
+  const handleCheckout = () => {
+    if (cartItems.length === 0) {
+      alert('Your cart is empty!');
+      return;
+    }
+    
+    // Close sidebar
+    onClose();
+    
+    // Call parent's checkout handler
+    if (onCheckout) {
+      onCheckout();
+    }
+  };
   return (
     <>
       {isOpen && <div className="cart-overlay" onClick={onClose} />}
@@ -67,7 +82,7 @@ const CartSidebar = ({ isOpen, onClose, cartItems, onUpdateQuantity, onRemoveIte
                 <span className="cart-total-label">Total:</span>
                 <span className="cart-total-amount">${totalPrice.toFixed(2)}</span>
               </div>
-              <button className="checkout-btn">Checkout</button>
+              <button className="checkout-btn test" onClick={handleCheckout}>Checkout</button>
             </div>
           )}
         </div>
