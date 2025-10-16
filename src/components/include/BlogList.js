@@ -4,11 +4,11 @@ import { LoadingSpinner } from '../include/LoadingSpinner';
 import { ErrorMessage } from '../include/ErrorMessage';
 import { BlogCard } from '../include/BlogCard';
 import { Pagination } from '../include/Pagination';
-
+import "../../assets/css/blogcard.css";
 export const BlogList = () => {
   const { blogs, loading, error, refetch } = useFetchBlogs();
 const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const itemsPerPage = 12;
 
 const totalPages = Math.ceil(blogs.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -52,7 +52,7 @@ const totalPages = Math.ceil(blogs.length / itemsPerPage);
         </div>
 
         {/* Blog List */}
-        <div className="space-y-4 mb-8">
+        <div className="space-y-4 mb-8 blog-grid">
           {currentBlogs.map((blog) => (
             <BlogCard key={blog.id} blog={blog} />
           ))}
